@@ -1,0 +1,24 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    uint ID;
+    uint count<name="Count?">;
+    uint zeros[2];
+    float floatData[20];
+}WWSPLData;
+
+char Magic[4];
+uint version;
+uint structCount;
+uint unkn;
+WWSPLData WSPL[structCount];

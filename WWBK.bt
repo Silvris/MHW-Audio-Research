@@ -1,0 +1,22 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: Silvris
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    string BankName;
+    byte unkns[2];
+}Bank;
+
+char WWBK[4];
+uint version;
+uint BankCount;
+uint unkn;
+Bank WWiseSoundbank[BankCount]<optimize=false>;

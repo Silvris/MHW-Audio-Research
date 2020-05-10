@@ -1,0 +1,30 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: Silvris
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    short EventNumber<bgcolor=0x00FF00>;
+    short FF<bgcolor=0x000000>;
+    uint eventID<name="Event Object ID", bgcolor=0x0000FF>;
+    byte unknID[4]<bgcolor=0xFF0000>;
+    byte unkn[116]<bgcolor=0xFF00FF>;
+    string WWPC<bgcolor=0x00FFFF>;
+}WWEVStruct;
+
+char Magic[4]<bgcolor=0x000000>;
+uint version<bgcolor=0xFFFFFF>;
+uint structCount<bgcolor=0x00FFFF>;
+uint unkn;
+string WWBKstring<bgcolor=0xFFFF00>;
+string WWPKstring<bgcolor=0xFFFF00>;
+string WWCOLstring<bgcolor=0xFFFF00>;
+string WWSPLstring<bgcolor=0xFFFF00>;
+WWEVStruct WWEVData[structCount]<optimize=false>;

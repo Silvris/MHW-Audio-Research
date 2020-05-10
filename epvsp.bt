@@ -1,0 +1,26 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    short unkn[4]<bgcolor=0xFF0000>;
+    short groupID<bgcolor=0x00FF00>;
+    short uknk2[5]<bgcolor=0x0000FF>;
+}EPVSP;
+
+byte IceborneMark[4]<bgcolor=0xFFFFFF>;
+char ESP[4]<bgcolor=0x000000>;
+uint version<bgcolor=0x000000>;
+float unknFloat<bgcolor=0x000000>;
+string WWCTPath<bgcolor=0xFF00FF>;
+uint trailCount<bgcolor=0xFFFF00>;
+byte zeros[4];
+EPVSP EPVSPData[trailCount];

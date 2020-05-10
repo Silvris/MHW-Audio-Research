@@ -1,0 +1,35 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: Silvris
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    uint index;
+    string fileName;
+}IntString;
+
+char WWCT[4]<bgcolor=0xFFFFFF>;
+uint version<bgcolor=0x000000>;
+uint WWBKCount<bgcolor=0x0000FF>;
+uint WWPKCount<bgcolor=0x0088FF>;
+uint WWEVCount<bgcolor=0x00FFFF>;
+uint WWSWCount<bgcolor=0x00FF00>;
+uint WWSTCount<bgcolor=0xFF0000>;
+uint WWGPCount<bgcolor=0xFF0088>;
+uint WWENFCount<bgcolor=0xFF00FF>;
+uint Unkn3Count<bgcolor=0xFFFF00>;
+IntString WWEVPaths[WWEVCount]<optimize=false,bgcolor=0x00FFFF>;
+IntString WWBKPaths[WWBKCount]<optimize=false,bgcolor=0x0000FF>;
+IntString WWPKPaths[WWPKCount]<optimize=false,bgcolor=0x0088FF>;
+IntString WWSWPaths[WWSWCount]<optimize=false,bgcolor=0x00FF00>;
+IntString WWSTPaths[WWSTCount]<optimize=false,bgcolor=0xFF0000>;
+IntString WWGPPaths[WWGPCount]<optimize=false,bgcolor=0xFF0088>;
+IntString WWENFPaths[WWENFCount]<optimize=false,bgcolor=0xFF00FF>;
+IntString Unkn3Paths[Unkn3Count]<optimize=false,bgcolor=0xFFFF00>;

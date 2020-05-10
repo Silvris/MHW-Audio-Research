@@ -1,0 +1,22 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    string String;
+}StringStruct;
+
+char WATL[4];
+uint version;
+uint WWATCount;
+uint unkn;
+string WIASstring;
+StringStruct WWATPaths[WWATCount]<optimize=false>;

@@ -1,0 +1,416 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: Deathcream, Silvris
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 1.1
+//      -Rewrote the majority of the template to be recursive
+//------------------------------------------------
+local int i <hidden=true>;
+local int j <hidden=true>;
+local int Bool1Length <hidden=true>;
+local int Bool2Length <hidden=true>;
+local int value <hidden=true>; //Hidden so they don't appear in the variables
+local int wemcnt <hidden=true>; //Re-enable if you wanna check (hidden=false)
+typedef struct{
+    long blockID;
+    uint sectionLength;
+}BlockHeader;
+
+typedef struct{
+ value = (Header.sectionLength/4)-2;
+ int32 unkn1;
+ uint nbnkID;
+ int32 data[value];
+}BKHD;
+
+typedef struct{
+ uint32 WemId; //ID?
+ uint32 phoffs; //Post Header offset
+ uint32 size; //Byte size of wem
+}WemHead;
+
+typedef struct{
+ wemcnt = Header.sectionLength/12;
+ WemHead wemh[wemcnt];
+}DIDX;
+
+typedef struct{
+    byte datum;
+}DATA;
+
+typedef struct{
+    byte datum;
+}UnknData;
+
+typedef struct{
+    byte blockID;
+    uint sectionLength;
+}HIRCBlockHeader;
+
+typedef struct{
+    uint objectID;
+    byte settingsCount;
+    byte settingsType[settingsCount];
+    float settingsValue[settingsCount];
+}HIRC1;
+
+typedef struct{
+    uint objectID;
+    byte actionScope;
+    byte actionType;
+    uint affectedID;
+    byte zero;
+    byte additionalParameters;
+    for(i=0;i<additionalParameters;i++){
+        byte parameterType;
+    };
+    for(i=0;i<additionalParameters;i++){
+        if(parameterType[i] == 16) uint probability;
+        else uint unkn;
+    };
+    byte zero2;
+    if(actionType == 1){
+        byte unkn;
+        uint unkn2;
+    };
+    if(actionType == 4){
+        byte unkn;
+        uint NBNKID;
+    };
+    if(actionType == 10){
+        byte unknD[2];
+        float unkn2[4];
+    };
+    if(actionType == 11){
+        byte unknE[18];
+    };
+    if(actionType == 13){
+        byte unknF[18];
+    };
+    if(actionType == 14){
+        byte unknA[2];
+        float unkn2[4];
+    };
+    if(actionType == 15){
+        byte unknB[2];
+        float unknC[4];
+    };
+    if(actionType == 19){
+        byte unknG[19];
+    };
+    if(actionType == 18){
+        uint StateGroupID;
+        uint StateID;
+    };
+    if(actionType == 25){
+        uint SwitchGroupID;
+        uint SwitchID;
+    };
+}HIRC3;
+
+typedef struct{
+    uint objectID<name="Object ID">;
+    uint actionCount<name="Action Count">;
+    uint actionID[actionCount]<name="Action IDs">;
+}HIRC4;
+
+typedef struct{
+    uint objectID;
+    uint unkn[2];
+    uint PlaylistContainerID;
+    byte unkn1;
+    byte unknBool;
+    if (unknBool == 1){
+        byte unkn;
+        float unkn2;
+    };
+    byte unkn1a[9];
+    byte unknBool2;
+    if (unknBool2 == 1){
+        byte unkns[7];//3 bytes and a float?
+    };
+    byte unkn1b[5];
+    uint childCount;
+    for (i=0;i<childCount;i++){
+        uint childID;
+    };
+    double unkn2;
+    uint unkn4[2];
+    float unkn5;
+    byte unkn6a;
+    byte unkn6b[6];
+    double loopTime1<bgcolor=0x0000FF>;
+    uint unknCount;
+    uint unknParameter;
+    double unknDouble[(2*(unknCount-2)+1)];
+    uint stringLength;
+    if (stringLength > 0){
+    string unknString;
+    };
+    char loopHash[4];//HÖ»[
+    double loopTime2<bgcolor=0xFF0000>;
+    uint zero;
+}HIRC10;
+
+typedef struct{
+    uint objectID<name="Object ID">;
+    uint unkn[2];
+    uint unknCommonID<name="Playlist Container ID">;
+    byte unkn1;
+    byte unknBool;
+    if (unknBool == 1){
+        byte unkn;
+        float unkn2;
+        local int Bool1Length = 5;
+    };
+    byte unkn1a[9];
+    byte unknBool2;
+    if (unknBool2 == 1){
+        byte unkns[7];//3 bytes and a float?
+        local int Bool2Length = 7;
+    };
+    byte unkn1b[5];
+    uint childCount;
+    for (i=0;i<childCount;i++){
+        uint childID<name="Child Music Track ID">;
+    };
+    double unkn2;
+    uint unkn4[2];
+    float unkn5;
+    byte unkn6a;
+    byte unkn6b[6];
+    double loopTime1<bgcolor=0x0000FF,name="Loop Time 1">;
+    byte unknF[StructHeader.sectionLength-88-(childCount*4)-Bool1Length-Bool2Length];
+    char loopHash[4];//HÖ»[
+    double loopTime2<bgcolor=0xFF0000,name="Loop Time 2">;
+    uint zero;
+}HIRC10S;
+
+typedef struct{
+    uint objectID;
+    byte unknA;
+    byte headerCount;
+    byte unkn1[8];
+    for(i=0;i<headerCount;i++){
+        uint wemID;
+        byte unknb1;
+        byte unknb2;
+        byte unknb3;
+        byte unknb4;
+        byte unknb5;
+        uint unknCount;
+        byte unknb6;
+    };
+    for(i=0;i<unknCount;i++){
+        byte unkna1;
+        byte unkna2;
+        byte unkna3;
+        uint wemID2;
+        double startingPointPositive;
+        double startingPointNegative;
+        double remainderOfSong;
+        double songTotalLength;
+        byte unkna4;
+    };
+    byte unkns[3];
+    byte unknCount2;
+    byte unknBytes[3];
+    if(unknCount2>0){
+            uint unkn1;
+            uint unkn2;
+            uint unkn3;
+            uint unkn4;
+            float unkn5;
+            double unknDouble1;
+            float unknFloat1;
+            if(unknCount2>1){
+                uint unkn6;
+                uint unkn7;
+                uint unkn8;
+                uint unkn9;
+                float unkn10;
+                uint unkn11;
+            };
+            for(i=0;i<unknCount2;i++){
+                double unknDouble2;
+                float unknFloat2;
+        };
+        uint unknF;
+    };
+    byte unknsA[7];
+    uint parentID;
+    byte unknByte;
+    byte unknBool2;
+    if(unknBool2==1){
+        byte unknBytes1[5];
+    };
+    byte unknByte3;
+    byte unkns2[8];
+    byte unknBool3;
+    if(unknBool3>0){
+        byte unkn[3];
+        float unknFloat;
+    };
+    byte unknByte4;
+    byte unknBool4;
+    byte unknByte5;
+    if(unknBool4==1){
+        uint unknID1;
+        uint unknID2;
+        for(i=0;i<unknBool3-1;i++){
+            uint unknID3;
+        };
+    };
+    byte unknByte6;
+    short unknBool5;
+    if(unknBool5==1){
+        uint unknID1;
+        uint UnknID2;
+    };
+    byte unknBytes2[7];
+}HIRC11;
+
+typedef struct{
+    local int unknCount;
+    uint objectID;
+    byte unknA;
+    byte headerCount;
+    byte unkn1[8];
+    for(i=0;i<headerCount;i++){
+        uint wemID;
+        byte unknb1;
+        byte unknb2;
+        byte unknb3;
+        byte unknb4;
+        byte unknb5;
+        uint unknCount;
+        byte unknb6;
+    };
+    for(i=0;i<unknCount;i++){
+        byte unkna1;
+        byte unkna2;
+        byte unkna3;
+        uint wemID2;
+        double startingPointPositive;
+        double startingPointNegative;
+        double remainderOfSong;
+        double songTotalLength;
+        byte unkna4;
+    };
+    byte unkns[StructHeader.sectionLength-14-(headerCount*14)-(unknCount*40)];
+}HIRC11S;
+
+typedef struct{
+    uint objectID;
+    uint actorMixerID;
+    float unkns[3];
+    byte unknByte1;
+    if (unknBytes != 0){
+        byte unknowns[15];
+    };
+    float unknFloat;
+    uint unknID2;
+    byte unknCount;
+    for (i=0;i<unknCount;i++){
+        short unkn1; //might be flags of some sort
+        uint unknID;
+        byte unknByte;
+    };
+    byte unkns1[13];
+}HIRC20;
+
+struct HIRCParseBlock;
+typedef struct{
+    HIRCBlockHeader StructHeader<bgcolor=0xFF00FF,name="Header">;
+    local int i;
+    if (StructHeader.blockID == 1) HIRC1 settings<optimize = false, bgcolor=0x0000FF, name="Settings">;
+    else if (StructHeader.blockID == 2) for(i=0;i<(StructHeader.sectionLength);i++)UnknData soundsfxvoice<optimize = false, bgcolor=0x0000FF, name="Sound SFX/Sound Voice">;
+    else if (StructHeader.blockID == 3) HIRC3 eventaction<optimize = false, bgcolor=0xCFB3FF, name="Event Action">;
+    else if (StructHeader.blockID == 4) HIRC4 event<optimize = false, bgcolor=0xD3FFB3, name="Event">;
+    else if (StructHeader.blockID == 5) for(i=0;i<(StructHeader.sectionLength);i++)UnknData rngsequencecontainer<optimize = false, bgcolor=0xB3D8FF, name="Random/Sequence Container">;
+    else if (StructHeader.blockID == 6) for(i=0;i<(StructHeader.sectionLength);i++)UnknData switchcontainer<optimize = false, bgcolor=0xEAFFB3, name="Switch Container">;
+    else if (StructHeader.blockID == 7) for(i=0;i<(StructHeader.sectionLength);i++)UnknData actormixer<optimize = false, bgcolor=0xFFCAB3, name="Actor-Mixer">;
+    else if (StructHeader.blockID == 8) for(i=0;i<(StructHeader.sectionLength);i++)UnknData audiobus<optimize = false, bgcolor=0xFFBAB3, name="Audio Bus">;
+    else if (StructHeader.blockID == 9) for(i=0;i<(StructHeader.sectionLength);i++)UnknData blendcontainer<optimize = false, bgcolor=0xFFB3DA, name="Blend Container">;
+    else if (StructHeader.blockID == 10) HIRC10S musicsegment<optimize = false, bgcolor=0x33FFBD, name="Music Segment">;
+    else if (StructHeader.blockID == 11) HIRC11S musictrack<optimize = false, bgcolor=0xB3FFD0, name="Music Track">;
+    else if (StructHeader.blockID == 12) for(i=0;i<(StructHeader.sectionLength);i++)UnknData mswitchcontainer<optimize = false, bgcolor=0xB3FFB3, name="Music Switch Container">;
+    else if (StructHeader.blockID == 13) for(i=0;i<(StructHeader.sectionLength);i++)UnknData playlistcontainer<optimize = false, bgcolor=0xFF4040, name="Music Playlist Container">;
+    else if (StructHeader.blockID == 14) for(i=0;i<(StructHeader.sectionLength);i++)UnknData attenuation<optimize = false, bgcolor=0x40C2FF, name="Attenuation">;
+    else if (StructHeader.blockID == 15) for(i=0;i<(StructHeader.sectionLength);i++)UnknData dialogueevent<optimize = false, bgcolor=0x85FF40, name="Dialogue Event">;
+    else if (StructHeader.blockID == 16) for(i=0;i<(StructHeader.sectionLength);i++)UnknData motionbus<optimize = false, bgcolor=0xFFDF40, name="Motion Bus">;
+    else if (StructHeader.blockID == 17) for(i=0;i<(StructHeader.sectionLength);i++)UnknData motionfx<optimize = false, bgcolor=0xFF9F40, name="Motion FX">;
+    else if (StructHeader.blockID == 18) for(i=0;i<(StructHeader.sectionLength);i++)UnknData effect<optimize = false, bgcolor=0x7440FF, name="Effect">;
+    else if (StructHeader.blockID == 19) for(i=0;i<(StructHeader.sectionLength);i++)UnknData unkntype19<optimize = false, bgcolor=0x40FF9A, name="Unknown Type 19">;
+    else if (StructHeader.blockID == 20) for(i=0;i<(StructHeader.sectionLength);i++)UnknData auxiliarybus<optimize = false, bgcolor=0x407AFF, name="Auxiliary Bus">;
+    else for(i=0;i<(StructHeader.sectionLength);i++)UnknData Data<optimize = false,bgcolor=0x000000, name="unkBlock">; // sType
+}HIRCParseBlock;
+
+typedef struct{
+    uint structCount;
+    HIRCParseBlock HIRCData[structCount]<optimize=false,name="Object Data">;
+}HIRC;
+
+typedef struct{
+    float volumeThreshold;
+    uint16 maxVoiceInstances;
+    uint stateGroupCount;
+    for (i=0;i<stateGroupCount;i++){
+        uint stateGroupID;
+        uint defaultTransitionTime;
+        uint customTransitionCount;
+        for (j=0;j<customTransitionCount;j++){
+            uint stateIDFrom;
+            uint stateIDTo;
+            uint transitionTime;
+        };
+    };
+    uint switchGroupCount;
+    for (i=0;i<switchGroupCount;i++){
+        uint switchGroupID;
+        uint gameParameterID;
+        byte unknownByte;
+        uint pointCount;
+        for (j=0;j<pointCount;j++){
+            float gameParameterValue;
+            uint SwitchIDatValue;
+            uint curveShape;
+        };
+    };
+    uint gameParameterCount;
+    for (i=0;i<gameParameterCount;i++){
+        uint gameParameterID;
+        float defaultValue;
+        uint unknCount;
+        float unkn3;
+        float unkn1;
+        byte unkn2;
+    };
+    byte spacer[8];
+}STMG;
+
+typedef struct{
+    uint stringLength;
+    string exportPlatform;
+}PLAT;
+
+struct ParseableBlock;
+struct ParseableBlock{
+    BlockHeader Header<bgcolor=0xFFFF00>;
+    Printf("%08x - %d\n",Header.blockID,Header.sectionLength);
+    local int i;
+    if (Header.blockID == 1145588546) BKHD BKHDBlock<optimize = false, bgcolor=0x0000FF, name="Bank Header">;
+    else if (Header.blockID == 1480870212) DIDX DIDXBlock<optimize = false, bgcolor=0xFF0000, name="Data Index">;
+    else if (Header.blockID == 1096040772) for(i=0;i<(Header.sectionLength);i++) DATA DATABlock<optimize = false, bgcolor=0x00FF00, name="Wem Data">; //there is a more detailed structure for this, but it's a lot of effort to get it to work with the recursion, and its mostly just regular wav iirc
+    else if (Header.blockID == 1129466184) HIRC HIRCBlock<optimize = false, bgcolor=0x123456, name="WWise Objects">;
+    else if (Header.blockID == 1196250195) STMG STMGBlock<optimize = false, bgcolor=0x987654, name="State Management">;
+    else if (Header.blockID == 1413565520) PLAT PLATBlock<optimize = false, bgcolor=0xF0F0F0, name="Platform of Export">;
+    else for(i=0;i<(Header.sectionLength);i++)UnknData Data<optimize = false,bgcolor=0x000000, name="unkBlock">; // sType
+};
+while(FTell()< FileSize()) ParseableBlock MainBlock;

@@ -1,0 +1,35 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+	uint WemID<bgcolor=0xFF0000>;
+	uint unkn;
+	uint wemLength;
+	uint wemOffset<format=hex,bgcolor=0x00FF00>;
+	uint unkn2;
+}wemStruct;
+
+char APKHHeader[4];
+uint unkn;
+uint unkn2;
+uint unkn3;
+uint unkn4;
+uint unkn5;
+uint unkn6;
+uint unkn7;
+uint unkn8;
+uint unkn9;
+char SFXHeader[6];
+short align;
+uint unkn10;
+uint wemCount;
+wemStruct wems[wemCount];
