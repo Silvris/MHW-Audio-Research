@@ -358,6 +358,18 @@ typedef struct{
 }HIRC;
 
 typedef struct{
+        uint unknValues;
+        uint stringLength;
+        string unknAddon;
+}INITString;
+typedef struct{
+    uint stringCount;
+    for (i=0;i<stringCount;i++){
+        INITString String;
+    };
+}INIT;
+
+typedef struct{
     float volumeThreshold;
     uint16 maxVoiceInstances;
     uint stateGroupCount;
@@ -409,6 +421,7 @@ struct ParseableBlock{
     else if (Header.blockID == 1480870212) DIDX DIDXBlock<optimize = false, bgcolor=0xFF0000, name="Data Index">;
     else if (Header.blockID == 1096040772) for(i=0;i<(Header.sectionLength);i++) DATA DATABlock<optimize = false, bgcolor=0x00FF00, name="Wem Data">; //there is a more detailed structure for this, but it's a lot of effort to get it to work with the recursion, and its mostly just regular wav iirc
     else if (Header.blockID == 1129466184) HIRC HIRCBlock<optimize = false, bgcolor=0x123456, name="WWise Objects">;
+    else if (Header.blockID == 1414090313) INIT INITBlock<optimize = false, bgcolor=0x567890, name="Initialization">;
     else if (Header.blockID == 1196250195) STMG STMGBlock<optimize = false, bgcolor=0x987654, name="State Management">;
     else if (Header.blockID == 1413565520) PLAT PLATBlock<optimize = false, bgcolor=0xF0F0F0, name="Platform of Export">;
     else for(i=0;i<(Header.sectionLength);i++)UnknData Data<optimize = false,bgcolor=0x000000, name="unkBlock">; // sType
