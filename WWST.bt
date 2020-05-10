@@ -2,7 +2,7 @@
 //--- 010 Editor v9.0.2 Binary Template
 //
 //      File: 
-//   Authors: Silvris
+//   Authors: 
 //   Version: 
 //   Purpose: 
 //  Category: 
@@ -11,14 +11,13 @@
 //   History: 
 //------------------------------------------------
 typedef struct{
-    uint ID;
-    uint count<name="Count?">;
-    uint zeros[2];
-    float floatData[20];
-}WWSPLData;
+    uint id;
+    uint data;
+}WWSTStruct;
 
-char Magic[4];
+char WWST[4];
 uint version;
 uint structCount;
-uint unkn;
-WWSPLData WSPL[structCount];
+byte FFFF[4];
+uint unkn[3];
+WWSTStruct WWSTData[structCount];
