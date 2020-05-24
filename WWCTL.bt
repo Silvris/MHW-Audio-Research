@@ -1,0 +1,21 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Binary Template
+//
+//      File: 
+//   Authors: Silvris
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: 
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct{
+    string WWCT;
+}WWCTL;
+
+char WCTL[4];
+uint version;
+uint ContainerCount;
+uint spacer;
+WWCTL Containers[ContainerCount]<optimize=false>;
