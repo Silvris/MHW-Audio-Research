@@ -51,3 +51,26 @@ void WemReplace (uint a, double b, double c, double d, double e){
         };
     };
 };
+
+void WemReplace8Var (uint a, double b, double c, double d, double e, double f, double g, double h, double m){
+    for (i = 1; i<2;i++){
+        if (MainBlock[i].Header.blockID == 1129466184){
+            for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){
+                if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 11){
+                    if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID == a){
+                        if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount == 2){
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[0] = b;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[0] = c;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[0] = d;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[0] = e;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[1] = f;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[1] = g;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[1] = h;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[1] = m;
+                        };
+                    };
+                };
+            };
+        };
+    };
+};
