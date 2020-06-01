@@ -41,8 +41,19 @@ typedef struct{
 }DIDX;
 
 typedef struct{
-    byte datum;
-}DATA;
+    byte wemByte;
+}WemByte;
+
+struct WemData{
+        WemByte wemData[MainBlock[1].DIDXBlock.wemh[i].size]<optimize=false>;
+};
+
+struct DATA{
+    for(i=0;i<wemcnt;i++){
+        FSeek(MainBlock[0].Header.sectionLength+MainBlock[1].Header.sectionLength+MainBlock[1].DIDXBlock.wemh[i].phoffs+24);
+        WemData Wem<optimize=false>;
+    };
+};
 
 typedef struct{
     byte datum;
@@ -59,6 +70,19 @@ typedef struct{
     byte settingsType[settingsCount];
     float settingsValue[settingsCount];
 }HIRC1;
+
+typedef struct{
+    uint objectID;
+    short unkn1;
+    short unkn2;
+    byte spacing;
+    uint wemID;
+    uint byteLength;
+    uint unkn4;
+    uint unkn5;
+    uint SequenceGroupID;
+    byte unapproachableData[StructHeader.sectionLength-29];
+}HIRC2;
 
 typedef struct{
     uint objectID;
@@ -330,7 +354,7 @@ typedef struct{
     HIRCBlockHeader StructHeader<bgcolor=0xFF00FF,name="Header">;
     local int i;
     if (StructHeader.blockID == 1) HIRC1 settings<optimize = false, bgcolor=0x0000FF, name="Settings">;
-    else if (StructHeader.blockID == 2) for(i=0;i<(StructHeader.sectionLength);i++)UnknData soundsfxvoice<optimize = false, bgcolor=0x0000FF, name="Sound SFX/Sound Voice">;
+    else if (StructHeader.blockID == 2) HIRC2 soundsfxvoice<optimize = false, bgcolor=0x0000FF, name="Sound SFX/Sound Voice">;
     else if (StructHeader.blockID == 3) HIRC3 eventaction<optimize = false, bgcolor=0xCFB3FF, name="Event Action">;
     else if (StructHeader.blockID == 4) HIRC4 event<optimize = false, bgcolor=0xD3FFB3, name="Event">;
     else if (StructHeader.blockID == 5) for(i=0;i<(StructHeader.sectionLength);i++)UnknData rngsequencecontainer<optimize = false, bgcolor=0xB3D8FF, name="Random/Sequence Container">;
@@ -436,7 +460,7 @@ struct ParseableBlock{
     local int i;
     if (Header.blockID == 1145588546) BKHD BKHDBlock<optimize = false, bgcolor=0x0000FF, name="Bank Header">;
     else if (Header.blockID == 1480870212) DIDX DIDXBlock<optimize = false, bgcolor=0xFF0000, name="Data Index">;
-    else if (Header.blockID == 1096040772) for(i=0;i<(Header.sectionLength);i++) DATA DATABlock<optimize = false, bgcolor=0x00FF00, name="Wem Data">; //there is a more detailed structure for this, but it's a lot of effort to get it to work with the recursion, and its well documented elsewhere, look through vgmstream's source code
+    else if (Header.blockID == 1096040772) for(i=0;i<(Header.sectionLength);i++)UnknData DATABlock<optimize = false, bgcolor=0x00FF00, name="Wem Data">; //there is a more detailed structure for this, but it's a lot of effort to get it to work with the recursion, and its well documented elsewhere, look through vgmstream's source code
     else if (Header.blockID == 1129466184) HIRC HIRCBlock<optimize = false, bgcolor=0x123456, name="WWise Objects">;
     else if (Header.blockID == 1414090313) INIT INITBlock<optimize = false, bgcolor=0x567890, name="Initialization">;
     else if (Header.blockID == 1196250195) STMG STMGBlock<optimize = false, bgcolor=0x987654, name="State Management">;
