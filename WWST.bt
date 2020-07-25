@@ -19,5 +19,7 @@ char WWST[4];
 uint version;
 uint structCount;
 byte FFFF[4];
-uint unkn[3];
+uint sWwiseBgmManager;
+uint unknHash;
+uint unkn2;
 WWSTStruct WWSTData[structCount];

@@ -19,16 +19,21 @@ typedef struct{
 }wemStruct;
 
 char APKHHeader[4];
-uint unkn;
+uint HeaderLength;
 uint unkn2;
 uint unkn3;
 uint unkn4;
-uint unkn5;
+uint wemTableLength;
 uint unkn6;
 uint unkn7;
 uint unkn8;
 uint unkn9;
-wstring audioType;
+if(unkn9 > 0){
+    uint unknValue;
+    uint unknA;
+    wstring audioType;
+};
+wstring sfx;
 uint unkn10;
 uint wemCount;
 wemStruct wems[wemCount];

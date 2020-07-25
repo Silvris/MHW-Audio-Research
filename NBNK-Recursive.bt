@@ -146,6 +146,49 @@ typedef struct{
 
 typedef struct{
     uint objectID;
+    byte unkns[3];//these are probably important, but didn't seem to tie to anything that I saw
+    uint unknUint;
+    byte spacing1[3];
+    short spacing;
+    short unknA;
+    if(unknA > 1){
+        byte unknB;
+    };
+    for(i=0;i<unknA;i++){
+        float unknC;
+    };
+    for(i=0;i<unknA;i++){
+        byte unknE;
+        byte unknF;
+        byte unknG;
+    };
+    byte unkn;
+    uint UnknCount2;
+    for(i=0;i<UnknCount2;i++){
+        uint unknData;
+    };
+    uint unknCount1;
+    for(i=0;i<unknCount1;i++){
+        short unknShort;
+    };
+    float unknFloat;
+    uint unkn2[2];
+    uint unkn3;
+    byte unkn4;
+    byte unkn5;
+    uint wemCount;
+    for(i=0;i<wemCount;i++){
+        uint soundID;
+    };
+    short wemCount2;
+    for(i=0;i<wemCount2;i++){
+        uint soundID;
+        uint fiftythousand;
+    };
+}HIRC5;
+
+typedef struct{
+    uint objectID;
     uint unkn[2];
     uint PlaylistContainerID;
     byte unkn1;

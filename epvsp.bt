@@ -24,7 +24,7 @@ typedef struct{
 byte IceborneMark[4]<bgcolor=0xFFFFFF>;
 char ESP[4]<bgcolor=0x000000>;
 uint version<bgcolor=0x000000>;
-float unknFloat<bgcolor=0x000000>; //also possibly a EPVSP id
+uint rWwiseContainer<bgcolor=0x000000>; //also possibly a EPVSP id
 string WWCTPath<bgcolor=0xFF00FF>;
 uint trailCount<bgcolor=0xFFFF00>;
 byte zeros[4];

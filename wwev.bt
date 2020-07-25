@@ -14,7 +14,7 @@ typedef struct{
     short EventNumber<bgcolor=0x00FF00>;
     short FF<bgcolor=0x000000>;
     uint eventID<name="Event Object ID", bgcolor=0x0000FF>;
-    byte unknID[4]<bgcolor=0xFF0000>;
+    uint commandHash<bgcolor=0xFF0000>;
     byte unkn[116]<bgcolor=0xFF00FF>;
     string WWPC<bgcolor=0x00FFFF>;
 }WWEVStruct;
