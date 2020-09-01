@@ -18,7 +18,7 @@ typedef struct{
 	uint unkn2;
 }wemStruct;
 
-char APKHHeader[4];
+char AKPKHeader[4];
 uint HeaderLength;
 uint unkn2;
 uint unkn3;

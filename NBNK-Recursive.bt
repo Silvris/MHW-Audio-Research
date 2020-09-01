@@ -15,6 +15,7 @@ local int i <hidden=true>;
 local int j <hidden=true>;
 local int Bool1Length <hidden=true>;
 local int Bool2Length <hidden=true>;
+local int HIRC10Count1;
 local int value <hidden=true>; //Hidden so they don't appear in the variables
 local int wemcnt <hidden=true>; //Re-enable if you wanna check (hidden=false)
 typedef struct{
@@ -188,6 +189,15 @@ typedef struct{
 }HIRC5;
 
 typedef struct{
+    uint unknParameter;
+    double unknDouble;
+    uint stringLength;
+    if (stringLength > 0){
+        string unknString;
+    };
+}HIRC10A;
+
+typedef struct{
     uint objectID;
     uint unkn[2];
     uint PlaylistContainerID;
@@ -214,50 +224,11 @@ typedef struct{
     byte unkn6b[6];
     double loopTime1<bgcolor=0x0000FF>;
     uint unknCount;
-    uint unknParameter;
-    double unknDouble[(2*(unknCount-2)+1)];
-    uint stringLength;
-    if (stringLength > 0){
-    string unknString;
-    };
+    HIRC10A UnknDoubles[unknCount-1]<optimize=false>;
     char loopHash[4];//HÖ»[
     double loopTime2<bgcolor=0xFF0000>;
     uint zero;
 }HIRC10;
-
-typedef struct{
-    uint objectID<name="Object ID">;
-    uint unkn[2];
-    uint unknCommonID<name="Playlist Container ID">;
-    byte unkn1;
-    byte unknBool;
-    if (unknBool == 1){
-        byte unkn;
-        float unkn2;
-        local int Bool1Length = 5;
-    };
-    byte unkn1a[9];
-    byte unknBool2;
-    if (unknBool2 == 1){
-        byte unkns[7];//3 bytes and a float?
-        local int Bool2Length = 7;
-    };
-    byte unkn1b[5];
-    uint childCount;
-    for (i=0;i<childCount;i++){
-        uint childID<name="Child Music Track ID">;
-    };
-    double unkn2;
-    uint unkn4[2];
-    float unkn5;
-    byte unkn6a;
-    byte unkn6b[6];
-    double loopTime1<bgcolor=0x0000FF,name="Loop Time 1">;
-    byte unknF[StructHeader.sectionLength-88-(childCount*4)-Bool1Length-Bool2Length];
-    char loopHash[4];//HÖ»[
-    double loopTime2<bgcolor=0xFF0000,name="Loop Time 2">;
-    uint zero;
-}HIRC10S;
 
 typedef struct{
     uint objectID;
@@ -405,7 +376,7 @@ typedef struct{
     else if (StructHeader.blockID == 7) for(i=0;i<(StructHeader.sectionLength);i++)UnknData actormixer<optimize = false, bgcolor=0xFFCAB3, name="Actor-Mixer">;
     else if (StructHeader.blockID == 8) for(i=0;i<(StructHeader.sectionLength);i++)UnknData audiobus<optimize = false, bgcolor=0xFFBAB3, name="Audio Bus">;
     else if (StructHeader.blockID == 9) for(i=0;i<(StructHeader.sectionLength);i++)UnknData blendcontainer<optimize = false, bgcolor=0xFFB3DA, name="Blend Container">;
-    else if (StructHeader.blockID == 10) HIRC10S musicsegment<optimize = false, bgcolor=0x33FFBD, name="Music Segment">;
+    else if (StructHeader.blockID == 10) HIRC10 musicsegment<optimize = false, bgcolor=0x33FFBD, name="Music Segment">;
     else if (StructHeader.blockID == 11) HIRC11S musictrack<optimize = false, bgcolor=0xB3FFD0, name="Music Track">;
     else if (StructHeader.blockID == 12) for(i=0;i<(StructHeader.sectionLength);i++)UnknData mswitchcontainer<optimize = false, bgcolor=0xB3FFB3, name="Music Switch Container">;
     else if (StructHeader.blockID == 13) for(i=0;i<(StructHeader.sectionLength);i++)UnknData playlistcontainer<optimize = false, bgcolor=0xFF4040, name="Music Playlist Container">;
