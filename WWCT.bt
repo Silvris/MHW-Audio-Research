@@ -10,6 +10,14 @@
 //  ID Bytes: 
 //   History: 
 //------------------------------------------------
+local int EOWWEV;
+local int EOWWBK;
+local int EOWWPK;
+local int EOWWSW;
+local int EOWWST;
+local int EOWWGP;
+local int EOWWENF;
+local int EOUnkn3;
 typedef struct{
     uint index;
     string fileName;
@@ -26,10 +34,18 @@ uint WWGPCount<bgcolor=0xFF0088>;
 uint WWENFCount<bgcolor=0xFF00FF>;
 uint Unkn3Count<bgcolor=0xFFFF00>;
 IntString WWEVPaths[WWEVCount]<optimize=false,bgcolor=0x00FFFF>;
+EOWWEV = FTell();
 IntString WWBKPaths[WWBKCount]<optimize=false,bgcolor=0x0000FF>;
+EOWWBK = FTell();
 IntString WWPKPaths[WWPKCount]<optimize=false,bgcolor=0x0088FF>;
+EOWWPK = FTell();
 IntString WWSWPaths[WWSWCount]<optimize=false,bgcolor=0x00FF00>;
+EOWWSW = FTell();
 IntString WWSTPaths[WWSTCount]<optimize=false,bgcolor=0xFF0000>;
+EOWWST = FTell();
 IntString WWGPPaths[WWGPCount]<optimize=false,bgcolor=0xFF0088>;
+EOWWGP = FTell();
 IntString WWENFPaths[WWENFCount]<optimize=false,bgcolor=0xFF00FF>;
+EOWWENF = FTell();
 IntString Unkn3Paths[Unkn3Count]<optimize=false,bgcolor=0xFFFF00>;
+EOUnkn3 = FTell();

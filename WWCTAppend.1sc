@@ -1,0 +1,96 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Script File
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+//   History: 
+//------------------------------------------------
+local int lastIndex;
+local int stringPos;
+local int strlength;
+
+void WWCTAppend (string type, string filePath){
+    RunTemplate("WWCT.bt");
+    switch (type){
+        case "WWEV":
+            stringPos = EOWWEV + 4;
+            lastIndex = WWEVCount;
+            strlength = Strlen(filePath) + 5;
+            InsertBytes(EOWWEV, strlength);
+            WriteInt(EOWWEV, lastIndex);
+            WriteString(stringPos, filePath);
+            WWEVCount++;
+            break;
+        case "WWBK":
+            stringPos = EOWWBK + 4;
+            lastIndex = WWBKCount;
+            strlength = Strlen(filePath) + 5;
+            InsertBytes(EOWWBK, strlength);
+            WriteInt(EOWWBK, lastIndex);
+            WriteString(stringPos, filePath);
+            WWBKCount++;
+            break;
+        case "WWPK":
+            stringPos = EOWWPK + 4;
+            lastIndex = WWPKCount;
+            strlength = Strlen(filePath) + 5;
+            InsertBytes(EOWWPK, strlength);
+            WriteInt(EOWWPK, lastIndex);
+            WriteString(stringPos, filePath);
+            WWPKCount++;
+            break;
+        case "WWSW":
+            stringPos = EOWWSW + 4;
+            lastIndex = WWSWCount;
+            strlength = Strlen(filePath) + 5;
+            InsertBytes(EOWWSW, strlength);
+            WriteInt(EOWWSW, lastIndex);
+            WriteString(stringPos, filePath);
+            WWSWCount++;
+            break;
+        case "WWST":
+            stringPos = EOWWST + 4;
+            lastIndex = WWSTCount;
+            strlength = Strlen(filePath) + 5;
+            InsertBytes(EOWWST, strlength);
+            WriteInt(EOWWST, lastIndex);
+            WriteString(stringPos, filePath);
+            WWSTCount++;
+            break;
+        case "WWGP":
+            stringPos = EOWWGP + 4;
+            lastIndex = WWGPCount;
+            strlength = Strlen(filePath) + 5;
+            InsertBytes(EOWWGP, strlength);
+            WriteInt(EOWWGP, lastIndex);
+            WriteString(stringPos, filePath);
+            WWGPCount++;
+            break;
+        case "WWENF":
+            stringPos = EOWWENF + 4;
+            lastIndex = WWENFCount;
+            strlength = Strlen(filePath) + 5;
+            InsertBytes(EOWWENF, strlength);
+            WriteInt(EOWWENF, lastIndex);
+            WriteString(stringPos, filePath);
+            WWENFCount++;
+            break;
+        case "Unkn3":
+            stringPos = EOUnkn3 + 4;
+            lastIndex = Unkn3Count;
+            strlength = Strlen(filePath) + 5;
+            InsertBytes(EOUnkn3, strlength);
+            WriteInt(EOUnkn3, lastIndex);
+            WriteString(stringPos, filePath);
+            Unkn3Count++;
+            break;
+        default:
+            Printf("Invalid type.");
+    };
+    RunTemplate("WWCT.bt");
+}
+
+WWCTAppend("WWBK", "sound\\wwise\\Windows\\Test_WW");
