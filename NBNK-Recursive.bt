@@ -264,17 +264,7 @@ typedef struct{
         byte unkn1;
     };
     byte bool10;
-    for(i=0;i<bool10;i++){
-        byte unkn2;
-        uint unkn3;
-        uint unkn4;
-        uint unkn5;
-    };
     short bool11;
-    for(i=0;i<bool11;i++){
-        uint unknId;
-        uint unknID2;
-    };
     short bool13;
     if(bool10||bool9) {
         if(bool13){
