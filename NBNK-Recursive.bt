@@ -262,11 +262,21 @@ typedef struct{
     if(bool9==2){
         float unknFloat;
         byte unkn1;
+        short unkn2;
+        if(unkn2){
+            uint unkn1;
+            for(i=0;i<bool9;i++){
+                uint unkn2;
+            };
+            if(bool9>1){
+                byte unkn3;
+            };
+        };
     };
     byte bool10;
     short bool11;
     short bool13;
-    if(bool10||bool9) {
+    if(bool10) {
         if(bool13){
             HIRCSoundStructEnd footer;
         };

@@ -22,23 +22,8 @@ void WemReplace (uint a, double b, double c, double d, double e){
     for (i = 1; i<2;i++){
         if (MainBlock[i].Header.blockID == 1129466184){
             for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){
-                if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 10){
-                    if (MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.objectID == a){
-                        MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.loopTime1 = b;
-                        MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.loopTime2 = b;
-                    };
-                };
                 if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 11){
                     if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID == a){
-                        if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount > 1){
-                            for (k=0;k<MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount;k++){
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[k] = b;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[k] = c;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[k] = d;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[k] = e;
-                            };
-                            k = 0;
-                        };
                         if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount == 1){
                             MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[k] = b;
                             MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[k] = c;
@@ -52,21 +37,19 @@ void WemReplace (uint a, double b, double c, double d, double e){
     };
 };
 
-void WemReplace8Var (uint a, double b, double c, double d, double e, double f, double g, double h, double m){
+void MusicTrackMultiVar (uint id, uint count, double values[]){
     for (i = 1; i<2;i++){
         if (MainBlock[i].Header.blockID == 1129466184){
             for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){
                 if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 11){
-                    if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID == a){
-                        if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount == 2){
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[0] = b;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[0] = c;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[0] = d;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[0] = e;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[1] = f;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[1] = g;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[1] = h;
-                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[1] = m;
+                    if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID == id){
+                        if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount == count){
+                            for(k=0;k<count;k++){
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[k] = values[0+(k*4)];
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[k] = values[1+(k*4)];
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[k] = values[2+(k*4)];
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[k] = values[3+(k*4)];
+                            };
                         };
                     };
                 };
@@ -74,3 +57,19 @@ void WemReplace8Var (uint a, double b, double c, double d, double e, double f, d
         };
     };
 };
+
+MusicSegmentSpecificVar (uint id, double loop1, double loop2){
+    for (i = 1; i<2;i++){
+        if (MainBlock[i].Header.blockID == 1129466184){
+            for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){
+                if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 10){
+                    if (MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.objectID == id){
+                        MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.loopTime1 = loop1;
+                        MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.loopTime2 = loop2;
+                    };
+                };
+            };
+        };
+    };
+}
+MusicTrackMultiVar(148787464, 3, double array[12] = {0, 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10, 11});

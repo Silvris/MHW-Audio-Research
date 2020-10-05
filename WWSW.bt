@@ -12,7 +12,7 @@
 //------------------------------------------------
 typedef struct{
     uint structNumber<bgcolor=0x00FF00>;
-    byte unkn[4]<bgcolor=0x0000FF>;
+    uint unkn<format=hex,bgcolor=0x0000FF>;
 }WWSWStruct;
 
 char WWSW[4]<bgcolor=0xFFFFFF>;
