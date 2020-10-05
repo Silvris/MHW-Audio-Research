@@ -72,4 +72,7 @@ MusicSegmentSpecificVar (uint id, double loop1, double loop2){
         };
     };
 }
-MusicTrackMultiVar(148787464, 3, double array[12] = {0, 1.1, 2.2, 3.3, 4.4, 5.5, 6.6, 7.7, 8.8, 9.9, 10, 11});
+//examples for all functions
+//WemReplace (1066657510, 0.000, 0.000, -159724.75, 168963.792);
+//MusicTrackMultiVar (359197825, 2, double array[8] = { -17869.396,27469.396,-44858.521,97586.438,16989.125,17869.396,-70117.042,97586.438} );
+//MusicSegmentSpecificVar (786435346, 9239.042, 9239.042);
