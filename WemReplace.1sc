@@ -18,17 +18,56 @@ int i;
 int j;
 int k;
 int l;
+double array[];
 void WemReplace (uint a, double b, double c, double d, double e){
     for (i = 1; i<2;i++){
         if (MainBlock[i].Header.blockID == 1129466184){
             for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){
+                if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 10){
+                    if (MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.objectID == a){
+                        MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.loopTime1 = b;
+                        MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.loopTime2 = b;
+                    };
+                };
                 if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 11){
                     if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID == a){
+                        if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount > 1){
+                            for (k=0;k<MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount;k++){
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[k] = b;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[k] = c;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[k] = d;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[k] = e;
+                            };
+                            k = 0;
+                        };
                         if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount == 1){
                             MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[k] = b;
                             MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[k] = c;
                             MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[k] = d;
                             MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[k] = e;
+                        };
+                    };
+                };
+            };
+        };
+    };
+};
+
+void WemReplace8Var (uint a, double b, double c, double d, double e, double f, double g, double h, double m){
+    for (i = 1; i<2;i++){
+        if (MainBlock[i].Header.blockID == 1129466184){
+            for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){
+                if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 11){
+                    if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID == a){
+                        if (MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount == 2){
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[0] = b;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[0] = c;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[0] = d;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[0] = e;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[1] = f;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[1] = g;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[1] = h;
+                                MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[1] = m;
                         };
                     };
                 };
@@ -71,8 +110,9 @@ void MusicSegmentSpecificVar (uint id, double loop1, double loop2){
             };
         };
     };
-}
+};
 //examples for all functions
 //WemReplace (1066657510, 0.000, 0.000, -159724.75, 168963.792);
-//MusicTrackMultiVar (359197825, 2, double array[8] = { -17869.396,27469.396,-44858.521,97586.438,16989.125,17869.396,-70117.042,97586.438} );
+//double array[8] = { -17869.396,27469.396,-44858.521,97586.438,16989.125,17869.396,-70117.042,97586.438} 
+//MusicTrackMultiVar (359197825, 2, array);
 //MusicSegmentSpecificVar (786435346, 9239.042, 9239.042);
