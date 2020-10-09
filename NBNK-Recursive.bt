@@ -293,8 +293,15 @@ typedef struct{
     short unkn1;
     short unkn2;
     byte spacing;
-    uint wemID;
-    uint byteLength;
+    if(unkn2 == 101){
+        uint unkn19ID;
+        uint unkn2;
+        uint unkn3;
+    }
+    else{
+        uint wemID;
+        uint byteLength;
+    }
     byte unkn3;
     HIRCSoundStruct SoundData;
 }HIRC2;
@@ -385,6 +392,7 @@ typedef struct{
 typedef struct{
     uint switchID;
     uint unknIndex;
+    local int structStart = FTell();
     uint unknID[unknIndex];
 }HIRC6A;
 
@@ -483,6 +491,8 @@ typedef struct{
 }HIRC11;
 
 typedef struct{
+    local int unknHLen = 0;
+    local int effectLen = 0;
     uint objectID;
     byte unknA;
     uint headerCount;
@@ -503,7 +513,36 @@ typedef struct{
         double remainderOfSong<bgcolor=0xa45a7c>;
         double songTotalLength<bgcolor=0x93516f>;
     };
-    byte unkns[StructHeader.sectionLength-13-(headerCount*14)-(unknCount*40)];
+    uint unknB;
+    uint unknC;
+    for(j=0;j<unknC;j++){
+        uint unknF;
+        uint unknG;
+        uint unknH;
+        unknHLen += 12;
+        for(i=0;i<unknH;i++){
+            float unknI;
+            float unknJ;
+            uint unknK;
+            unknHLen += 12;
+        };
+    };
+    byte unkn1;
+    byte effectCount;
+    if(effectCount > 0){
+        byte flag;
+        for(i=0;i<effectCount;i++){
+            byte index;
+            uint effectObject;
+            byte zero1;
+            byte zero2;
+        };
+        effectLen = 1 + (effectCount*7);
+    };
+    byte bool1;
+    uint outputBus;
+    uint parentBus;
+    byte unkns[StructHeader.sectionLength-13-(headerCount*14)-(unknCount*40)-19-(effectLen)-(unknHLen)];
 }HIRC11S;
 
 typedef struct{

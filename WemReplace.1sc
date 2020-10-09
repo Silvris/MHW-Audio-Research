@@ -58,7 +58,7 @@ void MusicTrackMultiVar (uint id, uint count, double values[]){
     };
 };
 
-MusicSegmentSpecificVar (uint id, double loop1, double loop2){
+void MusicSegmentSpecificVar (uint id, double loop1, double loop2){
     for (i = 1; i<2;i++){
         if (MainBlock[i].Header.blockID == 1129466184){
             for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){

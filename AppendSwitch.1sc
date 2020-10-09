@@ -1,0 +1,34 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Script File
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+//   History: 
+//------------------------------------------------
+local int i;
+local int j;
+local int k;
+void AppendSwitch(){
+    for (i = 1; i<2;i++){
+        if (MainBlock[i].Header.blockID == 1129466184){
+            for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){
+                if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 6){
+                    for(k=0;k<MainBlock[i].HIRCBlock.HIRCData[j].switchcontainer.switchCount;k++){
+                        if(MainBlock[i].HIRCBlock.HIRCData[j].switchcontainer.switches[k].unknIndex == 0 && MainBlock[i].HIRCBlock.HIRCData[j].switchcontainer.switches[0].unknIndex > 0){
+                            MainBlock[i].Header.sectionLength += 4;
+                            MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.sectionLength += 4; 
+                            MainBlock[i].HIRCBlock.HIRCData[j].switchcontainer.switches[k].unknIndex++;
+                            InsertBytes(MainBlock[i].HIRCBlock.HIRCData[j].switchcontainer.switches[k].structStart, 4);
+                            WriteUInt(MainBlock[i].HIRCBlock.HIRCData[j].switchcontainer.switches[k].structStart, MainBlock[i].HIRCBlock.HIRCData[j].switchcontainer.switches[0].unknID[0]);
+                            RunTemplate("NBNK-Recursive.bt");
+                        };
+                    };
+                };
+            };
+        };
+    };
+}
+AppendSwitch();

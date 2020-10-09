@@ -1,0 +1,57 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Script File
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+//   History: 
+//------------------------------------------------
+int i;
+int j;
+int k;
+int l;
+local int lastParent;
+local int lastWemID;
+void HIRCtoCSV (){
+    int fileNum = GetFileNum();
+    FileNew("Text",true);
+    int newFileNum = GetFileNum();
+    FileSelect(fileNum);
+    string s;
+    string st;
+    string sa;
+    FPrintf(newFileNum, "Wem ID|ScriptRun|Parent\n");
+    for (i = 1; i<2;i++){
+        if (MainBlock[i].Header.blockID == 1129466184){
+            for (j = 0;j<MainBlock[i].HIRCBlock.structCount;j++){
+                if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 11){
+                    if(MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount!=0){
+                        lastParent = MainBlock[i].HIRCBlock.HIRCData[j].musictrack.parentBus;
+                        lastWemID = MainBlock[i].HIRCBlock.HIRCData[j].musictrack.wemID;
+                        s = "";
+                        SPrintf(s,"MusicTrackMultiVar(%d, %d, double array[%d] = { ", MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID ,MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount,MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount*4);
+                        for(k=0;k<MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount;k++){
+                            st = "";
+                            SPrintf(st, "%lf,%lf,%lf,%lf", MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[k]);
+                            s += st; 
+                        };
+                        s += "});";
+                        FPrintf(newFileNum, "%d|%s|%d\n", MainBlock[i].HIRCBlock.HIRCData[j].musictrack.wemID, s, MainBlock[i].HIRCBlock.HIRCData[j].musictrack.parentBus);
+                    };
+                };
+                if (MainBlock[i].HIRCBlock.HIRCData[j].StructHeader.blockID == 10){
+                    if(MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.objectID == lastParent){
+                        sa = "";
+                        SPrintf(sa, "MusicSegmentSpecificVar(%d, %lf, %lf);", MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.objectID, MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.loopTime1, MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.loopTime2);
+                        FPrintf(newFileNum, "%d|%s|%d\n", lastWemID, sa, MainBlock[i].HIRCBlock.HIRCData[j].musicsegment.objectID);
+                    };
+                };
+            };
+        };
+    };
+    FileSelect(newFileNum);
+    FileSave("bgm_ingame_cmn.csv");
+};
+HIRCtoCSV();
