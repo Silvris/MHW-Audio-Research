@@ -19,5 +19,5 @@ char WWSW[4]<bgcolor=0xFFFFFF>;
 uint version<bgcolor=0x000000>;
 uint structCount<bgcolor=0xFF0000>;
 byte FFFF[4]<bgcolor=0x000000>;
-uint unkn[3]<bgcolor=0x000000>;
+uint unkn[3]<format=hex,bgcolor=0x000000>;
 WWSWStruct WWSWData[structCount];

@@ -35,14 +35,12 @@ void HIRCtoCSV (){
                         SPrintf(s,"double array[%d] = {", MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount*4);
                         for(k=0;k<MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount;k++){
                             st = "";
-                            if(k != 0){
-                                SPrintf(st, ", ");
-                            };
-                            SPrintf(st, "%lf, %lf, %lf, %lf", MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[k]);
+                            SPrintf(st, "%lf, %lf, %lf, %lf,", MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointNegative[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.startingPointPositive[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.remainderOfSong[k],MainBlock[i].HIRCBlock.HIRCData[j].musictrack.songTotalLength[k]);
                             s += st; 
                         };
+                        s = StrDel(s, Strlen(s)-1,1);
                         s+="};";
-                        SPrintf(se, "MusicTrackMultiVar(%d, %d, array});",MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID ,MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount);
+                        SPrintf(se, "MusicTrackMultiVar(%d, %d, array);",MainBlock[i].HIRCBlock.HIRCData[j].musictrack.objectID ,MainBlock[i].HIRCBlock.HIRCData[j].musictrack.unknCount);
                         FPrintf(newFileNum, "%d|%s|%s|%d\n", MainBlock[i].HIRCBlock.HIRCData[j].musictrack.wemID, s, se, MainBlock[i].HIRCBlock.HIRCData[j].musictrack.parentBus);
                     };
                 };
