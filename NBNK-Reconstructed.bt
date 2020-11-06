@@ -17,6 +17,7 @@ Massive thanks to "bnnm" on GitHub for his "wwiser" project, having effectively 
 local int i;
 local int j;
 local int k;
+local int m;
 typedef struct{
     char dwTag[4];
     uint dwChunkSize;
@@ -35,8 +36,8 @@ typedef struct(uint chunkSize){
 }BankHeader;
 
 //DIDX
-typedef struct{
-    uint pLoadedMedia;
+typedef struct(uint chunkSize){
+    local uint pLoadedMedia = (chunkSize/12);
     for(i=0;i<pLoadedMedia;i++){
         uint id;
         uint uOffset;
@@ -75,9 +76,19 @@ typedef struct(uint length){
 }UnknData;
 
 typedef struct{
+    byte uFXIndex;
+    uint fxID;
+    byte bIsShareSet;
+    byte bIsRendered;
+}FXChunk;
+
+typedef struct{
     byte bIsOverrideParentFX;
     byte uNumFX;
-    //worry about fixing this later
+    if(uNumFX) byte bitsFXBypass;
+    for(j=0;j<uNumFX;j++){
+        FXChunk Effect;
+    };
 }NodeInitialFXParams;
 
 typedef struct{
@@ -94,7 +105,13 @@ typedef struct{
     byte cProps;
     for(i=0;i<cProps;i++){
         byte pID;
-        uint pValue;
+    };
+    for(i=0;i<cProps;i++){
+        if(pID[i] == 2||pID[i] == 0){
+            float min;
+            float max;
+        }
+        else uint pValue;
     };
 }AkPropRangedValue;
 
@@ -210,6 +227,13 @@ typedef struct{
     InitialRTPC RTPCs;
 }NodeBaseParams;
 
+typedef struct{
+    uint uNumChildren;
+    for(i=0;i<uNumChildren;i++){
+        uint ulChildID;
+    };
+}Children;
+
 //Decision Tree Attempt
 typedef struct{
     uint key;
@@ -263,6 +287,28 @@ typedef struct{
         float pValue;
     };
 }State;
+
+//HIRC 2
+typedef struct{
+    uint sourceID;
+    uint uInMemoryMediaSize;
+    byte uSourceBits;
+}AkMediaInformation;
+
+typedef struct{
+    uint ulPluginID;
+    byte StreamType;
+    AkMediaInformation MediaInformation;
+    if((ulPluginID & 0x000000FF) == 2){
+        uint uSize;
+    };
+}BankSourceData;
+
+typedef struct{
+    BankSourceData BankData;
+    NodeBaseParams BaseParams;
+}Sound;
+
 //HIRC 3
 typedef struct{
     uint ulStateGroupID;
@@ -296,6 +342,7 @@ typedef struct{
 typedef struct(uint16 ulActionType){
     byte byBitVector;
     if(ulActionType==0x1302)GameParameterParams SpecificParams;
+    if(ulActionType==0x1303)GameParameterParams SpecificParams;
     if(ulActionType==0x0A02)PropActionParams SpecificParams;
     if(ulActionType==0x0B02)PropActionParams SpecificParams;
     if(ulActionType==0x0C02)PropActionParams SpecificParams;
@@ -317,6 +364,7 @@ typedef struct{
     if(ulActionType == 0x0102)ActiveActionParams ActiveAction;
     if(ulActionType == 0x0103)ActiveActionParams ActiveAction;
     if(ulActionType == 0x1302)ValueActionParams ValueAction(ulActionType);
+    if(ulActionType == 0x1303)ValueActionParams ValueAction(ulActionType);
     if(ulActionType == 0x0A02)ValueActionParams ValueAction(ulActionType);
     if(ulActionType == 0x0B02)ValueActionParams ValueAction(ulActionType);
     if(ulActionType == 0x0C02)ValueActionParams ValueAction(ulActionType);
@@ -332,6 +380,69 @@ typedef struct{
     };
 }Event;
 
+//HIRC 5
+typedef struct{
+    NodeBaseParams BaseParams;
+    uint16 sLoopCount;
+    uint16 sLoopModMin;
+    uint16 sLoopModMax;
+    float fTransitionTime;
+    float fTransitionTimeModMin;
+    float fTransitionTimeModMax;
+    uint16 wAvoidRepeatCount;
+    byte eTransitionMode;
+    byte eRandomMode;
+    byte eMode;
+    byte BitVector;
+    Children ChildrenList;
+    uint16 ulNumPlaylistItem;
+    for(j=0;j<ulNumPlaylistItem;j++){
+        uint ulPlayID;
+        int Weight;
+    };
+
+}RandomSequence;
+
+//HIRC 6
+typedef struct{
+    uint ulSwitchID;
+    uint ulNumItems;
+    for(j=0;j<ulNumItems;j++){
+        uint NodeID;
+    };
+}SwitchPackage;
+
+typedef struct{
+    uint ulNodeID;  
+    byte BitVector1;
+    byte BitVector2;
+    int FadeOutTime;
+    int FadeInTime;
+}SwitchNodeParam;
+
+typedef struct{
+    NodeBaseParams BaseParams;
+    byte eGroupType;
+    uint ulGroupID;
+    uint ulDefaultSwitch;//~!~!~!~!~!~!~!
+    byte bIsContinuousValidation;
+    Children ChildList;
+    uint ulNumSwitchGroups;
+    for(m=0;m<ulNumSwitchGroups;m++){
+        SwitchPackage Switches;
+    };
+    uint ulNumSwitchParams;
+    for(m=0;m<ulNumSwitchParams;m++){
+        SwitchNodeParam SwitchParam;
+    };
+}Switch;
+
+//HIRC 7
+typedef struct{
+    NodeBaseParams BaseParams;
+    Children ChildList;
+}ActorMixer;//somehow that's it?
+
 //HIRC 8
 typedef struct{
     AkPropValue PropValues;
@@ -341,13 +452,6 @@ typedef struct{
     uint uChannelConfig;
     byte BitVector3;
 }BusInitialParams;
-
-typedef struct{
-    byte uFXIndex;
-    uint fxID;
-    byte bIsShareSet;
-    byte bIsRendered;
-}FXChunk;
 
 typedef struct{
     byte uNumFX;
@@ -384,12 +488,6 @@ typedef struct{
 }AudioBus;
 
 //HIRC 10
-typedef struct{
-    uint uNumChildren;
-    for(i=0;i<uNumChildren;i++){
-        uint ulChildID;
-    };
-}Children;
 
 typedef struct{
     double fGridPeriod;
@@ -607,10 +705,13 @@ typedef struct{
     ubyte bIsConeEnabled;
     byte curveToUse[7];
     byte NumCurves;
-    for(i=0;i<NumCurves;i++){
+    for(j=0;j<NumCurves;j++){
         CAkConversionTable Curve;
     };
     uint16 ulNumRTPC; //to-do there is a for here, but not present in bgm_ingame_cmn
+    for(j=0;j<ulNumRTPC;j++){
+        InitialRTPC RTPCs;
+    };
 }Attenuation;
 
 //HIRC 18
@@ -648,11 +749,23 @@ typedef struct{
         case 1:
             State Object<name="State",bgcolor=0xFF0000>;//honestly a little closer to being settings
             break;
+        case 2:
+            Sound Object<name="Sound",bgcolor=0x0000FF>;
+            break;
         case 3:
             Action Object<name="Action",bgcolor=0xCFB3FF>;
             break;
         case 4:
             Event Object<name="Event",bgcolor=0xD3FFB3>;
+            break;
+        case 5:
+            RandomSequence Object<name="Random/Sequence",bgcolor=0xB3D8FF>;
+            break;
+        case 6:
+            Switch Object<name="Switch",bgcolor=0xEAFFB3>;
+            break;
+        case 7:
+            ActorMixer Object<name="Actor-Mixer",bgcolor=0xFFCAB3>;
             break;
         case 8:
             AudioBus Object<name="Audio Bus",bgcolor=0xFFBAB3>;
@@ -667,7 +780,7 @@ typedef struct{
             MusicSwitch Object<name="Music Switch",bgcolor=0xB3FFB3>;
             break;
         case 13:
-            MusicPlaylist Object<name="Music Playlist",bgcolor=0xFF4040>;\
+            MusicPlaylist Object<name="Music Playlist",bgcolor=0xFF4040>;
             break;
         case 14:
             Attenuation Object<name="Attenuation",bgcolor=0x40C2FF>;
@@ -769,10 +882,10 @@ struct FileBlock{
             PluginChunk INIT<name="Plugins",bgcolor=0x567890>;
             break;
         case "DIDX":
-            MediaIndex DIDX<name="Media Index",bgcolor=0xFF0000>;
+            MediaIndex DIDX(Header.dwChunkSize)<name="Media Index",bgcolor=0xFF0000>;
             break;
         case "DATA":
-            DataChunk DATA<name="Data Chunk",bgcolor=0x00FF00>;
+            DataChunk DATA(Header.dwChunkSize)<name="Data Chunk",bgcolor=0x00FF00>;
             break;
         case "HIRC":
             ObjectHierarchy HIRC<name="Object Hierarchy",bgcolor=0x123456>;

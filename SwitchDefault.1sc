@@ -1,0 +1,25 @@
+//------------------------------------------------
+//--- 010 Editor v9.0.2 Script File
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+//   History: 
+//------------------------------------------------
+local int i;
+local int j;
+local int k;
+void SwitchDefault(){
+    for (i = 1; i<2;i++){
+        if (Block[i].Header.dwTag == "HIRC"){
+            for (j = 0;j<Block[i].HIRC.NumReleasableHircItem;j++){
+                if (Block[i].HIRC.Object[j].Header.eHircType == 6){
+                    Block[i].HIRC.Object[j].Object.ulDefaultSwitch = Block[i].HIRC.Object[j].Object.Switches[0].ulSwitchID;
+                };
+            };
+        };
+    };
+}
+SwitchDefault();
