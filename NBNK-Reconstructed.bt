@@ -21,6 +21,7 @@ typedef struct{
     char dwTag[4];
     uint dwChunkSize;
 }ChunkHeader;
+
 //BKHD
 typedef struct(uint chunkSize){
     uint dwBankGeneratorVersion; //should be 120 on a MHW nbnk
@@ -32,6 +33,7 @@ typedef struct(uint chunkSize){
         uint gap;
     };
 }BankHeader;
+
 //DIDX
 typedef struct{
     uint pLoadedMedia;
@@ -41,10 +43,26 @@ typedef struct{
         uint uSize;
     };
 }MediaIndex;
+
 //DATA
 typedef struct(uint dwChunkSize){
     byte pLoadedMedia[dwChunkSize];
 }DataChunk;
+
+//INIT
+typedef struct{
+    uint ulPluginID;
+    uint uStringSize;
+    string pDLLName;
+}IAkPlugin;
+
+typedef struct{
+    uint pluginCount;
+    for(i=0;i<pluginCount;i++){
+        IAkPlugin Plugin;
+    };
+}PluginChunk;
+
 //HIRC Common
 typedef struct{
     byte eHircType;
@@ -66,6 +84,8 @@ typedef struct{
     byte cProps;
     for(i=0;i<cProps;i++){
         byte pID;
+    };
+    for(i=0;i<cProps;i++){
         uint pValue;
     };
 }AkPropValue;
@@ -96,6 +116,13 @@ typedef struct{
 
 typedef struct{
     byte byBitVector;
+    local byte has_aux = byBitVector >> 2;
+    if(has_aux){
+        uint auxID1;
+        uint auxID2;
+        uint auxID3;
+        uint auxID4;
+    };
 }AuxParams;
 
 typedef struct{
@@ -105,6 +132,21 @@ typedef struct{
     byte eBelowThresholdBehavior;
     byte byBitVector2;
 }AdvSettingsParams;
+
+typedef struct{
+    uint StateFrom;
+    uint StateTo;
+    uint TranisitonTime;
+}StateTransition;
+
+typedef struct{
+    uint ulStateGroupID;
+    uint DefaultTransitionTime;
+    uint ulNumTransitions;
+    for(i=0;i<ulNumTransitions;i++){
+        StateTransition Transition;
+    };
+}StateGroup;
 
 typedef struct{
     uint ulNumStateGroups;
@@ -149,7 +191,7 @@ typedef struct{
 
 typedef struct{
     uint16 ulInitialRTPC;
-    for(i=0;i<ulInitialRTPC;i++){
+    for(j=0;j<ulInitialRTPC;j++){
         RTPC rtpc;
     };
 }InitialRTPC;
@@ -290,6 +332,57 @@ typedef struct{
     };
 }Event;
 
+//HIRC 8
+typedef struct{
+    AkPropValue PropValues;
+    byte BitVector1;
+    byte BitVector2;
+    uint16 u16MaxNumInstance;
+    uint uChannelConfig;
+    byte BitVector3;
+}BusInitialParams;
+
+typedef struct{
+    byte uFXIndex;
+    uint fxID;
+    byte bIsShareSet;
+    byte bIsRendered;
+}FXChunk;
+
+typedef struct{
+    byte uNumFX;
+    if(uNumFX)byte bitsFXBypass;
+    for(j=0;j<uNumFX;j++){
+        FXChunk pFXChunk;
+    };
+    uint fxID_0;
+    byte bIsShareSet_0;
+}BusInitialFXParams;
+
+typedef struct{
+    uint BusID;
+    float DuckVolume;
+    int FadeOutTime;
+    int FadeInTime;
+    byte eFadeCurve;
+    byte TargetProp;
+}DuckInfo;
+
+typedef struct{
+    uint OverrideBusID;
+    BusInitialParams InitialParams;
+    int RecoveryTime;
+    float fMaxDuckVolume;
+    uint ulDucks;
+    for(j=0;j<ulDucks;j++){
+        DuckInfo Duck;
+    };
+    BusInitialFXParams FXParams;
+    byte bOverrideAttachmentParams;
+    InitialRTPC RTPCs;
+    StateChunk States;
+}AudioBus;
+
 //HIRC 10
 typedef struct{
     uint uNumChildren;
@@ -307,13 +400,24 @@ typedef struct{
 }AkMeterInfo;
 
 typedef struct{
+    uint TriggerID;
+    uint SegmentID;
+    uint SyncPlayAt;
+    uint uCueFilterHash;
+    int DontRepeatTime;
+    uint numSegmentLookAhead;
+}AkStinger;
+
+typedef struct{
     byte uFlags;
     NodeBaseParams BaseParams;
     Children ChildrenList;
     AkMeterInfo MeterInfo;
     byte bMeterInfoFlag;
     uint uNumStingers;
-    //stinger info to come
+    for(i=0;i<uNumStingers;i++){
+        AkStinger Stinger;
+    };
 }MusicNodeParams;
 
 typedef struct{
@@ -465,6 +569,31 @@ typedef struct{
 //    DecisionTree decisionTree(uTreeDepth);
 }MusicSwitch;
 
+//HIRC 13
+struct pPlaylistItem;
+struct pPlaylistItem{
+    uint SegmentID;
+    uint playlistItemID;
+    uint NumChildren;
+    uint eRSType;
+    int16 Loop;
+    int16 LoopMin;
+    int16 LoopMax;
+    uint Weight;
+    uint16 wAvoidRepeatCount;
+    byte bIsUsingWeight;
+    byte bIsShuffle;
+    //these technically have children, but NumPlaylistItems actually takes them into account
+};
+
+typedef struct{
+    MusicTransNodeParams MusicTransParams;
+    uint numPlaylistItems;
+    for(i=0;i<numPlaylistItems;i++){
+        pPlaylistItem playlistItem;
+    };
+}MusicPlaylist;
+
 //HIRC 14
 typedef struct{
     byte eScaling;
@@ -484,6 +613,34 @@ typedef struct{
     uint16 ulNumRTPC; //to-do there is a for here, but not present in bgm_ingame_cmn
 }Attenuation;
 
+//HIRC 18
+typedef struct{
+    uint fxID;//determined by type and company
+    uint uSize;
+    byte pParamBlock[uSize];//WWiser doesn't even try to read this, I suppose it's different for each fx
+    byte uNumBankData;
+    InitialRTPC RTPCs;
+    uint16 ulNumInit;
+    //inits go here
+}FxShareSet;
+
+//HIRC 20
+typedef struct{
+    //It's literally just an Audio Bus, but *technically* different
+    uint OverrideBusID;
+    BusInitialParams InitialParams;
+    int RecoveryTime;
+    float fMaxDuckVolume;
+    uint ulDucks;
+    for(j=0;j<ulDucks;j++){
+        DuckInfo Duck;
+    };
+    BusInitialFXParams FXParams;
+    byte bOverrideAttachmentParams;
+    InitialRTPC RTPCs;
+    StateChunk States;
+}AuxiliaryBus;
+
 //HIRC Main
 typedef struct{
     HircHeader Header<bgcolor=0xFF00FF>;
@@ -497,6 +654,9 @@ typedef struct{
         case 4:
             Event Object<name="Event",bgcolor=0xD3FFB3>;
             break;
+        case 8:
+            AudioBus Object<name="Audio Bus",bgcolor=0xFFBAB3>;
+            break;
         case 10:
             MusicSegment Object<name="Music Segment",bgcolor=0x33FFBD>;
             break;
@@ -506,8 +666,17 @@ typedef struct{
         case 12:
             MusicSwitch Object<name="Music Switch",bgcolor=0xB3FFB3>;
             break;
+        case 13:
+            MusicPlaylist Object<name="Music Playlist",bgcolor=0xFF4040>;\
+            break;
         case 14:
             Attenuation Object<name="Attenuation",bgcolor=0x40C2FF>;
+            break;
+        case 18:
+            FxShareSet Object<name="FX Share Set",bgcolor=0x7440FF>;
+            break;
+        case 20:
+            AuxiliaryBus Object<name="Auxiliary Bus",bgcolor=0x407AFF>;
             break;
         default:
             UnknData Object(Header.dwSectionSize-4)<name="Unknown Data",bgcolor=0x000000>;
@@ -522,6 +691,72 @@ typedef struct{
     };
 }ObjectHierarchy;
 
+//STMG
+typedef struct{
+    uint SwitchGroupID;
+    uint RTPCID;
+    byte RTPCType;
+    uint ulSize;//actually a count;
+    for(i=0;i<ulSize;i++){
+        AkRTPCGraphPoint GraphPoint;
+    };
+}SwitchGroup;
+
+typedef struct{
+    uint RTPC_ID;
+    float fValue;
+    uint rampType;
+    float fRampUp;
+    float fRampDown;
+    byte eBindToBuiltInParam;
+}RTPCRamping;
+
+typedef struct{
+    float fVolumeThreshold;
+    uint16 maxNumVoicesLimitInternal;
+    uint ulNumStateGroups;
+    for(j=0;j<ulNumStateGroups;j++){
+        StateGroup StateGroups;
+    };
+    uint ulNumSwitchGroup;
+    for(j=0;j<ulNumSwitchGroup;j++){
+        SwitchGroup SwitchGroups;
+    };
+    uint ulNumParams;
+    for(j=0;j<ulNumParams;j++){
+        RTPCRamping RTPCRamp;
+    };
+    uint ulNumTextures;
+    //we don't get to know what this does, unused by MHW
+    uint ulNumReverberator;
+    //same
+}StateManager;
+    
+//ENVS
+typedef struct{
+    byte bCurveEnabled;
+    byte eCurveScaling;
+    uint16 ulCurveSize;
+    for(i=0;i<ulCurveSize;i++){
+        AkRTPCGraphPoint GraphPoint;
+    };
+}ObsOccCurve;
+
+typedef struct{
+    ObsOccCurve ObsVol;
+    ObsOccCurve ObsLPF;
+    ObsOccCurve ObsHPF;
+    ObsOccCurve OccVol;
+    ObsOccCurve OccLPF;
+    ObsOccCurve OccHPF;
+}EnvironmentSettings;
+
+//PLAT
+typedef struct{
+    uint uStringSize;
+    string pCustomPlatformName;
+}CustomPlatform;
+
 //File Main
 
 struct FileBlock{
@@ -529,6 +764,9 @@ struct FileBlock{
     switch(Header.dwTag){
         case "BKHD":
             BankHeader BKHD(Header.dwChunkSize)<name="Bank Header",bgcolor=0x0000FF>;
+            break;
+        case "INIT":
+            PluginChunk INIT<name="Plugins",bgcolor=0x567890>;
             break;
         case "DIDX":
             MediaIndex DIDX<name="Media Index",bgcolor=0xFF0000>;
@@ -538,6 +776,15 @@ struct FileBlock{
             break;
         case "HIRC":
             ObjectHierarchy HIRC<name="Object Hierarchy",bgcolor=0x123456>;
+            break;
+        case "STMG":
+            StateManager STMG<name="State Manager",bgcolor=0x987654>;
+            break;
+        case "ENVS":
+            EnvironmentSettings ENVS<name="Environment Settings",bgcolor=0x489863>;
+            break;
+        case "PLAT":
+            CustomPlatform PLAT<name="Custom Platform Name",bgcolor=0xF0F0F0>;
             break;
         default:
             UnknData Object(Header.dwChunkSize)<name="Unknown Data",bgcolor=0x000000>;
