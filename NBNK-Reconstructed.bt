@@ -487,6 +487,36 @@ typedef struct{
     StateChunk States;
 }AudioBus;
 
+//HIRC 9
+typedef struct{
+    uint ulAssociatedChildID;
+    uint ulCurveSize;
+    for(m=0;m<ulCurveSize;m++){
+        AkRTPCGraphPoint GraphPoint;
+    };
+}CAssociatedChildData;
+
+typedef struct{
+    uint ulLayerID;
+    InitialRTPC RTPCs;
+    uint RTPCId;
+    byte RTPCType;
+    uint ulNumAssoc;
+    for(j=0;j<ulNumAssoc;j++){
+        CAssociatedChildData ChildData;
+    };
+}Layer;
+
+typedef struct{
+    NodeBaseParams BaseParams;
+    Children ChildList;
+    uint ulNumLayers;
+    for(j=0;j<ulNumLayers;j++){
+        Layer Layers;
+    }
+    byte bIsContinuousValidation;
+}LayerContain;
+
 //HIRC 10
 
 typedef struct{
@@ -725,6 +755,17 @@ typedef struct{
     //inits go here
 }FxShareSet;
 
+//HIRC 19
+typedef struct{
+    uint fxID;//determined by type and company
+    uint uSize;
+    byte pParamBlock[uSize];//WWiser doesn't even try to read this, I suppose it's different for each fx
+    byte uNumBankData;
+    InitialRTPC RTPCs;
+    uint16 ulNumInit;
+    //inits go here
+}FxCustom;
+
 //HIRC 20
 typedef struct{
     //It's literally just an Audio Bus, but *technically* different
@@ -770,6 +811,9 @@ typedef struct{
         case 8:
             AudioBus Object<name="Audio Bus",bgcolor=0xFFBAB3>;
             break;
+        case 9:
+            LayerContain Object<name="Layer Container",bgcolor=0xFFB3DA>;
+            break;
         case 10:
             MusicSegment Object<name="Music Segment",bgcolor=0x33FFBD>;
             break;
@@ -787,6 +831,9 @@ typedef struct{
             break;
         case 18:
             FxShareSet Object<name="FX Share Set",bgcolor=0x7440FF>;
+            break;
+        case 19:
+            FxCustom Object<name="FX Custom",bgcolor=0x40FF9A>;
             break;
         case 20:
             AuxiliaryBus Object<name="Auxiliary Bus",bgcolor=0x407AFF>;
