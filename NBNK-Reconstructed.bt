@@ -783,6 +783,13 @@ typedef struct{
     StateChunk States;
 }AuxiliaryBus;
 
+//HIRC 22
+typedef struct{
+    AkPropValue PropValues;
+    AkPropRangedValue RangedPropValues;
+    InitialRTPC RTPCs;
+}EnvelopeModulator;
+
 //HIRC Main
 typedef struct{
     HircHeader Header<bgcolor=0xFF00FF>;
@@ -837,6 +844,9 @@ typedef struct{
             break;
         case 20:
             AuxiliaryBus Object<name="Auxiliary Bus",bgcolor=0x407AFF>;
+            break;
+        case 22:
+            EnvelopeModulator Object<name="Envelope Modulator",bgcolor=0x9900CC>;
             break;
         default:
             UnknData Object(Header.dwSectionSize-4)<name="Unknown Data",bgcolor=0x000000>;
