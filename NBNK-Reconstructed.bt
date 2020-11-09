@@ -97,7 +97,8 @@ typedef struct{
         byte pID;
     };
     for(i=0;i<cProps;i++){
-        uint pValue;
+        if(pID[i]==0)uint pValue;
+        else float pValue;
     };
 }AkPropValue;
 
