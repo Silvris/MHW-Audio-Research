@@ -11,14 +11,11 @@
 //   History: 
 //------------------------------------------------
 typedef struct{
-    short WWiseEvent<bgcolor=0x00FFFF>; //several have -1, meaning it either takes the previous one of the groupID or it just doesn't play anything
-    short unkn[3]<bgcolor=0xFF0000>;
-    short groupID<bgcolor=0x00FF00>;
-    short unkn2<bgcolor=0x0000FF>;
-    short recordID<bgcolor=0xFFFF00>;
-    short unkn3<bgcolor=0x0000FF>;
-    short skillUnkn<bgcolor=0xFF00FF>;
-    short unkn4<bgcolor=0x0000FF>;
+    int WWiseEvent<bgcolor=0x00FFFF>; //several have -1, meaning it either takes the previous one of the groupID or it just doesn't play anything
+    int unkn<bgcolor=0xFF0000>;
+    int groupID<bgcolor=0x00FF00>;
+    uint recordID<bgcolor=0xFFFF00>;
+    uint skillUnkn<bgcolor=0xFF00FF>;
 }EPVSP;
 
 byte IceborneMark[4]<bgcolor=0xFFFFFF>;
