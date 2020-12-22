@@ -21,8 +21,10 @@ typedef struct{
 byte IceborneMark[4]<bgcolor=0xFFFFFF>;
 char ESP[4]<bgcolor=0x000000>;
 uint version<bgcolor=0x000000>;
-uint rWwiseContainer<bgcolor=0x000000>; //also possibly a EPVSP id
-string WWCTPath<bgcolor=0xFF00FF>;
+uint hashType<format=hex,bgcolor=0x000000>;
+if (hashType == 0x45185BED){
+    string WWCTPath<bgcolor=0xFF00FF>;
+};
 uint trailCount<bgcolor=0xFFFF00>;
 uint zeros;//possible bools? or its a count for something that isn't used by the game. Used by hm_wp00.epvsp
 EPVSP EPVSPData[trailCount];
