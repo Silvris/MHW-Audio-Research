@@ -11,20 +11,30 @@
 //   History: 
 //------------------------------------------------
 typedef struct{
-    int WWiseEvent<bgcolor=0x00FFFF>; //several have -1, meaning it either takes the previous one of the groupID or it just doesn't play anything
-    int unkn<bgcolor=0xFF0000>;
-    int groupID<bgcolor=0x00FF00>;
-    uint recordID<bgcolor=0xFFFF00>;
-    uint skillUnkn<bgcolor=0xFF00FF>;
-}EPVSP;
+    int mElemNo<bgcolor=0xFF00FF>;
+    int mReqID<bgcolor=0x00FFFF>; //several have -1, meaning it either takes the previous one of the groupID or it just doesn't play anything
+    int mKillReqID<bgcolor=0xFF0000>;
+    uint EpvElement<bgcolor=0x00FF00>;
+    uint EpvIndex<bgcolor=0xFFFF00>;
+}RequestData;
 
-byte IceborneMark[4]<bgcolor=0xFFFFFF>;
+typedef struct{
+    int mElemNo<bgcolor=0xFF00FF>;
+    int mReqID<bgcolor=0x00FFFF>; //several have -1, meaning it either takes the previous one of the groupID or it just doesn't play anything
+    uint mCallState<bgcolor=0x0000FF>;
+    uint mOption<bgcolor=0xFF0000>;
+    uint EpvElement<bgcolor=0x00FF00>;
+    uint EpvIndex<bgcolor=0xFFFF00>;
+}TriggerData;
+
+uint IceborneMark<format=hex,bgcolor=0xFFFFFF>;
 char ESP[4]<bgcolor=0x000000>;
 uint version<bgcolor=0x000000>;
 uint hashType<format=hex,bgcolor=0x000000>;
 if (hashType == 0x45185BED){
     string WWCTPath<bgcolor=0xFF00FF>;
 };
-uint trailCount<bgcolor=0xFFFF00>;
-uint zeros;//possible bools? or its a count for something that isn't used by the game. Used by hm_wp00.epvsp
-EPVSP EPVSPData[trailCount];
+uint requestDataCount<bgcolor=0xFFFF00>;
+RequestData requestData[requestDataCount];
+uint triggerDataCount<bgcolor=0xFFFF00>;
+TriggerData triggerData[triggerDataCount];
