@@ -10,6 +10,9 @@
 //  ID Bytes: 
 //   History: 
 //------------------------------------------------
+//names/alternative names provided by NSA Cloud
+#include "Audiokinetics RIFF.bt"
+local int i;
 typedef struct{
 	uint WemID<bgcolor=0xFF0000>;
 	uint unkn;
@@ -18,25 +21,46 @@ typedef struct{
 	uint unkn2;
 }wemStruct;
 
+typedef struct(uint headerStart){
+    uint postHeaderOffset;
+    uint index;
+    local uint retVal = FTell();
+    FSeek(headerStart + postHeaderOffset);
+    wstring value;
+    FSeek(retVal);
+}stringData;
+
+string readStringData(stringData &s){
+    return s.value;
+};
+
+struct stringInfo(uint length){
+    local uint stringHeaderStart = FTell();
+    uint stringDataCount;
+    for(i=0;i<stringDataCount;i++){
+        stringData stringdata(stringHeaderStart)<read=readStringData>;
+    };
+    FSeek(stringHeaderStart + length);
+};
+
 char AKPKHeader[4];
-uint HeaderLength;
+uint HeaderLength;//dataOffset
 uint unkn2;
-uint unkn3;
-uint unkn4;
-uint wemTableLength;
-uint unkn6;
-uint unkn7;
-uint unkn8;
-uint unkn9;
-if(unkn9 > 0){
-    uint unknValue;
-    uint unknA;
-    wstring audioType;
-};
-wstring sfx;
-while(FTell() % 4 !=0){
-    byte pad;
-};
-uint unkn10;
+uint languageLength;
+uint bnkTableLength;//bankIndexLength
+uint wemTableLength;//mediaIndexLength
+uint unkn6;//unknStructLength, apparently not present in Capcom pcks
+stringInfo strings(languageLength);
+uint unkn10;//possible bankIndex value?
 uint wemCount;
 wemStruct wems[wemCount];
+uint unknStructCount;//normally 0
+if(FileSize() > (HeaderLength+8)){
+    //blocks "header only" pcks
+    struct EmbeddedWems{
+        for(i=0;i<wemCount;i++){
+            FSeek(wems[i].wemOffset);
+            RIFF embeddedAudio;
+        };
+    }embeddedWems;
+};

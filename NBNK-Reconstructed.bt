@@ -14,6 +14,7 @@
 **************************************************
 Massive thanks to "bnnm" on GitHub for his "wwiser" project, having effectively mapped out all versions of bnk. If you're looking at this file for reference, use that instead.
 */
+#include "Audiokinetics RIFF.bt"
 local int i;
 local int j;
 local int k;
@@ -35,19 +36,41 @@ typedef struct(uint chunkSize){
     };
 }BankHeader;
 
+typedef struct{
+    uint id;
+    uint uOffset;
+    uint uSize;
+}LoadedMedia;
+
 //DIDX
-typedef struct(uint chunkSize){
-    local uint pLoadedMedia = (chunkSize/12);
+typedef struct(uint dwChunkSize){
+    local uint pLoadedMedia = (dwChunkSize/12);
     for(i=0;i<pLoadedMedia;i++){
-        uint id;
-        uint uOffset;
-        uint uSize;
+        LoadedMedia loadedMedia;
     };
 }MediaIndex;
 
 //DATA
 typedef struct(uint dwChunkSize){
-    byte pLoadedMedia[dwChunkSize];
+    local uint postHeaderOffset = FTell();
+    local uint abort = 0;
+    while(abort==0){
+        for(i=0;i<Block[1].DIDX.pLoadedMedia;i++){
+            FSeek(Block[1].DIDX.loadedMedia[i].uOffset+postHeaderOffset+4);
+            if(ReadUInt() > Block[1].DIDX.loadedMedia[i].uSize){ //on a proper wem, this should be 8 bytes less (for the RIFF magic and length)
+                abort = 1;
+            }
+            else{
+                RIFF embeddedAudio<optimize=false>;
+            };
+        };
+    }
+    if(abort){
+        //if it fails, just default to reading length like normal
+        //this guarantees that even if one wem fails, others may still work and you can read the rest of the file fine
+        FSeek(postHeaderOffset);
+        byte pLoadedMedia[dwChunkSize];
+    }
 }DataChunk;
 
 //INIT

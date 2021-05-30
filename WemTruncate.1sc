@@ -1,0 +1,28 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Script File
+//
+//      File: 
+//   Authors: 
+//   Version: 
+//   Purpose: 
+//  Category: 
+//   History: 
+//------------------------------------------------
+FSeek(94+riff.WavHeader.chunk[0].FormatHeader.wemHeader.dwVorbisDataOffset);
+local int endOff = FTell();
+while(ReadByte() != 0x00){
+    endOff++;
+    FSkip(1);
+};
+Printf("%u",endOff);
+local string filename = GetFileName() + ".truncated";
+SetSelection( 0, endOff );
+CopyToClipboard();
+FileNew("Hex");
+PasteFromClipboard();
+if( FileSave( filename ) < 0 )
+{
+    MessageBox( idOk, GetScriptName(), "An error occured writing file '%s'.", filename );
+    return -1;
+}
+FileClose();
