@@ -54,16 +54,22 @@ typedef struct(uint dwChunkSize){
 typedef struct(uint dwChunkSize){
     local uint postHeaderOffset = FTell();
     local uint abort = 0;
-    while(abort==0){
+    local uint riffsize = 0;
+    local uint media = 0;
+    while(abort==0&&media==0){
         for(i=0;i<Block[1].DIDX.pLoadedMedia;i++){
-            FSeek(Block[1].DIDX.loadedMedia[i].uOffset+postHeaderOffset+4);
-            if(ReadUInt() > Block[1].DIDX.loadedMedia[i].uSize){ //on a proper wem, this should be 8 bytes less (for the RIFF magic and length)
+            FSeek(Block[1].DIDX.loadedMedia[i].uOffset+postHeaderOffset);
+            riffsize = ReadUInt(FTell()+4);
+            //Printf("%u\n",i);
+            if(riffsize > Block[1].DIDX.loadedMedia[i].uSize){ //on a proper wem, this should be 8 bytes less (for the RIFF magic and length)
+                Printf("RIFF Size: %u is greated than uSize:%u. Aborting wem reading....", riffsize, Block[1].DIDX.loadedMedia[i].uSize);
                 abort = 1;
             }
             else{
                 RIFF embeddedAudio<optimize=false>;
             };
         };
+        media=1;
     }
     if(abort){
         //if it fails, just default to reading length like normal

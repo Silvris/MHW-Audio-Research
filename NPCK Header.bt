@@ -14,12 +14,12 @@
 #include "Audiokinetics RIFF.bt"
 local int i;
 typedef struct{
-	uint WemID<bgcolor=0xFF0000>;
+	uint ID<bgcolor=0xFF0000>;
 	uint unkn;
-	uint wemLength;
-	uint wemOffset<format=hex,bgcolor=0x00FF00>;
-	uint unkn2;
-}wemStruct;
+	uint Length;
+	uint Offset<format=hex,bgcolor=0x00FF00>;
+	uint language;
+}embeddedMediaStruct;
 
 typedef struct(uint headerStart){
     uint postHeaderOffset;
@@ -51,15 +51,16 @@ uint bnkTableLength;//bankIndexLength
 uint wemTableLength;//mediaIndexLength
 uint unkn6;//unknStructLength, apparently not present in Capcom pcks
 stringInfo strings(languageLength);
-uint unkn10;//possible bankIndex value?
+uint bnkCount;//possible bankIndex value?
+embeddedMediaStruct bnks[bnkCount];
 uint wemCount;
-wemStruct wems[wemCount];
+embeddedMediaStruct wems[wemCount];
 uint unknStructCount;//normally 0
 if(FileSize() > (HeaderLength+8)){
     //blocks "header only" pcks
     struct EmbeddedWems{
         for(i=0;i<wemCount;i++){
-            FSeek(wems[i].wemOffset);
+            FSeek(wems[i].Offset);
             RIFF embeddedAudio;
         };
     }embeddedWems;
