@@ -141,7 +141,10 @@ typedef struct{
             float min;
             float max;
         }
-        else uint pValue;
+        else{
+         uint pValue;
+        Printf("%i", pValue);
+        };
     };
 }AkPropRangedValue;
 
@@ -265,46 +268,38 @@ typedef struct{
 }Children;
 
 //Decision Tree Attempt
-typedef struct{
+struct hollowNode(uint currentDepth, uint MaxDepth){
+    local int ChildCount = 0;
     uint key;
-    uint16 childIdx;
-    uint16 childCount;
-    uint16 uProbability;
-    uint16 uWeight;
-}UpperNode;
-
-typedef struct{
-    uint key;
-    uint audioNodeID;
-    uint16 uProbability;
-    uint16 uWeight;
-}LowerNode;
-local int newChildCount = 0;
-struct depth;
-struct depth(uint maxDepth,uint CurrentDepth){
-    newChildCount=0;
-    if(CurrentDepth < maxDepth){
-        UpperNode depthNode;
-        for(j=0;j<depthNode.childCount;j++){
-            depth nextDepth(maxDepth,CurrentDepth+1);
-        };
+    if(currentDepth == MaxDepth)
+    {
+        uint audioNodeId;
+        int16 Weight;
+        int16 Probability;
+    }
+    else{
+        uint16 childrenIdx;
+        uint16 childrenCount;
+        int16 Weight;
+        int16 Probability;
+        ChildCount = childrenCount;
+    }
+};
+struct Tree;
+struct Tree(uint currentDepth, uint MaxDepth, hollowNode &node){
+    local int childMarker;
+    for(childMarker = 0; childMarker < node.ChildCount; childMarker++){
+        hollowNode hollow(currentDepth+1, MaxDepth);
     };
-    if(CurrentDepth == maxDepth){
-        LowerNode audioNode;
+    if(node.ChildCount > 0){
+        for(childMarker = 0; childMarker < node.ChildCount; childMarker++){
+            Tree tn(currentDepth+1, MaxDepth,hollow[childMarker]);
+        }; 
     };
 };
-
 struct DecisionTree(uint Depth){
-    //first depth will always only be one, so we can immediately declare it
-    UpperNode firstNode;
-    UpperNode Depth1Node[firstNode.childCount];
-    if(Depth > 1){
-        for(j=0;j<firstNode.childCount;j++){
-            for(i=0;i<Depth1Node.childCount;i++){
-                depth firstDepth(Depth,1);
-            };
-        };
-    };
+    hollowNode firstHollow(0,Depth);
+    Tree firstNode(0, Depth, firstHollow);
 };
 
 //HIRC 1
@@ -341,14 +336,26 @@ typedef struct{
 
 //HIRC 3
 typedef struct{
+    local int u;
+    uint ulExceptionListSize;
+    for(u=0;u<ulExceptionListSize;u++){
+        uint ulID;
+        byte bIsBus;
+    };
+}ExceptParams;
+typedef struct{
     uint ulStateGroupID;
     uint ulTargetStateID;
 }StateActionParams;
 
 typedef struct{
+    uint ulSwitchGroupID;
+    uint ulSwitchStateID;
+}SwitchActionParams;
+
+typedef struct{
     byte byBitVector;
-    uint ulExceptionListSize;
-    //there will be more here
+    ExceptParams exceptions;
 }ActiveActionParams;
 
 typedef struct{
@@ -357,8 +364,6 @@ typedef struct{
     float base;
     float min;
     float max;
-    uint ulExceptionListSize;
-    //there will be more here
 }GameParameterParams;
 
 typedef struct{
@@ -366,7 +371,6 @@ typedef struct{
     float base;
     float min;
     float max;
-    uint ulExceptionListSize;
 }PropActionParams;
 
 typedef struct(uint16 ulActionType){
@@ -377,6 +381,7 @@ typedef struct(uint16 ulActionType){
     if(ulActionType==0x0B02)PropActionParams SpecificParams;
     if(ulActionType==0x0C02)PropActionParams SpecificParams;
     if(ulActionType==0x0D02)PropActionParams SpecificParams;
+    uint ulExceptionListSize;
 }ValueActionParams;
 
 typedef struct{
@@ -385,21 +390,25 @@ typedef struct{
 }PlayActionParams;
 
 typedef struct{
-    uint16 ulActionType;
     uint idExt;
     byte idExt_4;
     AkPropValue PropValues;
     AkPropRangedValue RangedPropValues;
+}ActionInitialParams;
+
+typedef struct{
+    uint16 ulActionType;
+    ActionInitialParams InitialParams;
     if(ulActionType == 0x1204)StateActionParams StateAction;
     if(ulActionType == 0x0102)ActiveActionParams ActiveAction;
     if(ulActionType == 0x0103)ActiveActionParams ActiveAction;
+    if(ulActionType == 0x0403)PlayActionParams PlayAction;
     if(ulActionType == 0x1302)ValueActionParams ValueAction(ulActionType);
     if(ulActionType == 0x1303)ValueActionParams ValueAction(ulActionType);
     if(ulActionType == 0x0A02)ValueActionParams ValueAction(ulActionType);
     if(ulActionType == 0x0B02)ValueActionParams ValueAction(ulActionType);
     if(ulActionType == 0x0C02)ValueActionParams ValueAction(ulActionType);
     if(ulActionType == 0x0D02)ValueActionParams ValueAction(ulActionType);
-    if(ulActionType == 0x0403)PlayActionParams PlayAction;
 }Action;
 
 //HIRC 4
@@ -723,8 +732,8 @@ typedef struct{
     };
     uint uTreeSize;
     byte bMode;
-    byte decisionTree[uTreeSize];//it's a bit intricate, hard to do in 010 C
-//    DecisionTree decisionTree(uTreeDepth);
+//    byte decisionTree[uTreeSize];//it's a bit intricate, hard to do in 010 C
+    DecisionTree decisionTree(uTreeDepth);
 }MusicSwitch;
 
 //HIRC 13
@@ -754,6 +763,14 @@ typedef struct{
 
 //HIRC 14
 typedef struct{
+    float fInsideDegrees;
+    float fOUtsideDegrees;
+    float fOutsideVolume;
+    float fLoPass;
+    float fHiPass;
+}ConeParams;
+
+typedef struct{
     byte eScaling;
     uint16 ulSize;
     for(i=0;i<ulSize;i++){
@@ -763,6 +780,9 @@ typedef struct{
 
 typedef struct{
     ubyte bIsConeEnabled;
+    if(bIsConeEnabled){
+        ConeParams coneParams;
+    };
     byte curveToUse[7];
     byte NumCurves;
     for(j=0;j<NumCurves;j++){

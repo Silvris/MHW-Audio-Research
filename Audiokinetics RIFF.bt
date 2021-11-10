@@ -78,6 +78,9 @@ typedef struct{
         short unknChannelInfo;//some form of channel layout, becomes 0x10 when 6 channels are present, but 0x00 with only 2
         ChannelLayout  channelLayout;
         AK_Header wemHeader;
+    }
+    else{
+        byte extraData[extraSize];
     };
 }FMT;
 
@@ -172,6 +175,9 @@ typedef struct{
     };
 }RIFF;
 
-if(ReadUInt(0x00) == 1179011410){//RIFF
+if(ReadUInt(0x00) == 1179011410||ReadUInt(0x00) == 1481001298){//RIFF/RIFX
+    if (ReadUInt(0x00) == 1481001298){
+        BigEndian();
+    };
     RIFF riff;//protection allowing it to be used in BNK and PCK templates
 };
